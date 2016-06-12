@@ -104,7 +104,7 @@ func BenchmarkWriteLong(b *testing.B) {
 	}
 }
 
-func Example() {
+func ExampleWriteChain() {
 	buf := &bytes.Buffer{}
 	writer := &binary.WriteChain{
 		Writer:    buf,
