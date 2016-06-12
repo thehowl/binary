@@ -2,6 +2,7 @@ package binary_test
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 
 	"github.com/thehowl/binary"
@@ -101,4 +102,23 @@ func BenchmarkWriteLong(b *testing.B) {
 			Int64Slice([]int64{6928692348, 242623, 235234523}).
 			End()
 	}
+}
+
+func Example_Write() {
+	buf := &bytes.Buffer{}
+	writer := &binary.WriteChain{
+		Writer:    buf,
+		ByteOrder: binary.LittleEndian,
+	}
+	_, err := writer.
+		Uint16(266).
+		Byte(1).
+		Uint32(2).
+		End()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("% x\n", buf.Bytes())
+	// Output: 0a 01 01 02 00 00 00
 }
