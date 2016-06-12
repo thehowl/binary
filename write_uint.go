@@ -5,19 +5,6 @@ func (c *WriteChain) Uint8(u uint8) *WriteChain {
 	return c.bytes([]byte{byte(u)})
 }
 
-func (c *WriteChain) bytes(b []byte) *WriteChain {
-	if c == nil || c.err != nil {
-		return c
-	}
-	written, err := c.Writer.Write(b)
-	c.written += written
-	c.err = err
-	if err == nil {
-		c.err = checkWritten(written, len(b))
-	}
-	return c
-}
-
 // Uint16 encodes an uint16 into the writer.
 func (c *WriteChain) Uint16(u uint16) *WriteChain {
 	x := make([]byte, 2)
@@ -51,4 +38,17 @@ func (c *WriteChain) Bool(b bool) *WriteChain {
 		return c.Uint8(1)
 	}
 	return c.Uint8(0)
+}
+
+func (c *WriteChain) bytes(b []byte) *WriteChain {
+	if c == nil || c.err != nil {
+		return c
+	}
+	written, err := c.Writer.Write(b)
+	c.written += written
+	c.err = err
+	if err == nil {
+		c.err = checkWritten(written, len(b))
+	}
+	return c
 }
