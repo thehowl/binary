@@ -10,10 +10,7 @@ func (c *WriteChain) BoolSlice(b []bool) *WriteChain {
 
 // ByteSlice encodes a slice of bytes into the writer.
 func (c *WriteChain) ByteSlice(b []byte) *WriteChain {
-	for _, el := range b {
-		c.Byte(el)
-	}
-	return c
+	return c.bytes(b)
 }
 
 // Complex128Slice encodes a slice of complex128s into the writer.
@@ -82,10 +79,7 @@ func (c *WriteChain) Int8Slice(i []int8) *WriteChain {
 
 // RuneSlice encodes a slice of runes into the writer.
 func (c *WriteChain) RuneSlice(r []rune) *WriteChain {
-	for _, el := range r {
-		c.Rune(el)
-	}
-	return c
+	return c.bytes([]byte(string(r)))
 }
 
 // Uint16Slice encodes a slice of uint16s into the writer.
@@ -114,10 +108,7 @@ func (c *WriteChain) Uint64Slice(u []uint64) *WriteChain {
 
 // Uint8Slice encodes a slice of uint8s into the writer.
 func (c *WriteChain) Uint8Slice(u []uint8) *WriteChain {
-	for _, el := range u {
-		c.Uint8(el)
-	}
-	return c
+	return c.bytes([]byte(u))
 }
 
 // String encodes a string into the writer.

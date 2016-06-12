@@ -51,3 +51,54 @@ func TestWrite(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+type fakeWriter struct{}
+
+func (f fakeWriter) Write(p []byte) (int, error) {
+	return len(p), nil
+}
+
+func BenchmarkWriteSmall(b *testing.B) {
+	var x = &binary.WriteChain{
+		Writer:    &fakeWriter{},
+		ByteOrder: binary.LittleEndian,
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		x.
+			Byte(255).
+			End()
+	}
+}
+
+func BenchmarkWriteMedium(b *testing.B) {
+	var x = &binary.WriteChain{
+		Writer:    &fakeWriter{},
+		ByteOrder: binary.LittleEndian,
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		x.
+			Int8(-122).
+			Uint64Slice([]uint64{52, 2342, 234, 19869186912682}).
+			End()
+	}
+}
+
+func BenchmarkWriteLong(b *testing.B) {
+	var x = &binary.WriteChain{
+		Writer:    &fakeWriter{},
+		ByteOrder: binary.LittleEndian,
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		x.
+			String("Ok meme").
+			Int8(-122).
+			Uint64Slice([]uint64{52, 2342, 234, 19869186912682}).
+			Int32(186928).
+			RuneSlice([]rune("how much wood would a woodchuck chuck if a woodchuck could chhuck wood?")).
+			Int64Slice([]int64{6928692348, 242623, 235234523}).
+			End()
+	}
+}
