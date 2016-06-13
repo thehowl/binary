@@ -116,8 +116,7 @@ func ExampleWriteChain() {
 		Uint32(2).
 		End()
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 	fmt.Printf("% x\n", buf.Bytes())
 	// Output: 0a 01 01 02 00 00 00
