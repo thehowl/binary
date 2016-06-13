@@ -14,34 +14,30 @@ func TestRead(t *testing.T) {
 	buf := bytes.NewBuffer(
 		[]byte(unmsh),
 	)
-	r := &binary.ReadChain{
+	r := &binary.Reader{
 		Reader:    buf,
 		ByteOrder: binary.LittleEndian,
 	}
 	{
-		var x int16
-		r.Int16(&x)
+		x := r.Int16()
 		if x != 11 {
 			t.Error("meme!", x)
 		}
 	}
 	{
-		var x byte
-		r.Byte(&x)
+		x := r.Byte()
 		if x != 16 {
 			t.Error("meme!", x)
 		}
 	}
 	{
-		var x bool
-		r.Bool(&x)
+		x := r.Bool()
 		if !x {
 			t.Error("meme!", x)
 		}
 	}
 	{
-		var x int8
-		r.Int8(&x)
+		x := r.Int8()
 		if x != -1 {
 			t.Error("meme!", x)
 		}
@@ -49,24 +45,20 @@ func TestRead(t *testing.T) {
 	// more tests soon™
 }
 
-func ExampleReadChain() {
+func ExampleReader() {
 	buf := bytes.NewBuffer([]byte("\x05\xff\x02\x00"))
-	r := &binary.ReadChain{
+	r := &binary.Reader{
 		Reader:    buf,
 		ByteOrder: binary.LittleEndian,
 	}
 	var (
-		b1 byte
-		b2 int8
-		i  int16
+		b1 = r.Byte()
+		b2 = r.Int8()
+		i  = r.Int16()
 	)
-	_, err := r.
-		Byte(&b1).
-		Int8(&b2).
-		Int16(&i).
-		End()
+	_, err := r.End()
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	fmt.Printf("%d - %d - %d\n", b1, b2, i)
 	// Output: 5 - -1 - 2

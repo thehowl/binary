@@ -54,25 +54,25 @@ func checkWritten(written, expected int) error {
 	return nil
 }
 
-// ReadChain wraps around an io.Reader and a encoding.ByteOrder, and reads data
-// from the reader into various pointers. ReadChain is not thread-safe.
-type ReadChain struct {
+// Reader is the simplified version of ReadChain. Instead of having to pass
+// pointers to decode bytes, using Reader you can read data directly and
+// do, for instance, simple assignments.
+type Reader struct {
 	Reader    io.Reader
 	ByteOrder encodingBinary.ByteOrder
 	read      int
 	err       error
 }
 
-// End finishes reading from the Reader, and returns the amount of read bytes
-// and any eventual error occured during the ReadChain lifetime. It also clears out
-// the read bytes and the error.
-func (c *ReadChain) End() (int, error) {
-	if c == nil {
+// End returns the amount of read bytes and any eventual error, and sets the
+// internal amount of written bytes to 0, and the error to nil.
+func (r *Reader) End() (int, error) {
+	if r == nil {
 		return -1, errChainNil
 	}
-	read := c.read
-	c.read = 0
-	err := c.err
-	c.err = nil
+	read := r.read
+	r.read = 0
+	err := r.err
+	r.err = nil
 	return read, err
 }

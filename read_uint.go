@@ -6,12 +6,7 @@ import (
 )
 
 // Uint8 decodes an uint8 from the Reader.
-func (r *ReadChain) Uint8(u *uint8) *ReadChain {
-	*u = r.uint8()
-	return r
-}
-
-func (r *ReadChain) uint8() uint8 {
+func (r *Reader) Uint8() uint8 {
 	b := r.rd(1)
 	if b == nil {
 		return 0
@@ -20,12 +15,7 @@ func (r *ReadChain) uint8() uint8 {
 }
 
 // Uint16 decodes an uint16 from the Reader.
-func (r *ReadChain) Uint16(u *uint16) *ReadChain {
-	*u = r.uint16()
-	return r
-}
-
-func (r *ReadChain) uint16() uint16 {
+func (r *Reader) Uint16() uint16 {
 	b := r.rd(2)
 	if b == nil {
 		return 0
@@ -34,12 +24,7 @@ func (r *ReadChain) uint16() uint16 {
 }
 
 // Uint32 decodes an uint32 from the Reader.
-func (r *ReadChain) Uint32(u *uint32) *ReadChain {
-	*u = r.uint32()
-	return r
-}
-
-func (r *ReadChain) uint32() uint32 {
+func (r *Reader) Uint32() uint32 {
 	b := r.rd(4)
 	if b == nil {
 		return 0
@@ -48,12 +33,7 @@ func (r *ReadChain) uint32() uint32 {
 }
 
 // Uint64 decodes an uint64 from the Reader.
-func (r *ReadChain) Uint64(u *uint64) *ReadChain {
-	*u = r.uint64()
-	return r
-}
-
-func (r *ReadChain) uint64() uint64 {
+func (r *Reader) Uint64() uint64 {
 	b := r.rd(8)
 	if b == nil {
 		return 0
@@ -62,20 +42,18 @@ func (r *ReadChain) uint64() uint64 {
 }
 
 // Byte decodes an uint64 from the Reader.
-func (r *ReadChain) Byte(b *byte) *ReadChain {
-	*b = byte(r.uint8())
-	return r
+func (r *Reader) Byte() byte {
+	return byte(r.Uint8())
 }
 
 // Bool decodes a bool from the Reader.
-func (r *ReadChain) Bool(b *bool) *ReadChain {
-	*b = r.uint8() != 0
-	return r
+func (r *Reader) Bool() bool {
+	return r.Uint8() > 0
 }
 
 // not read (present) because read (past participle) is in the struct's
 // fields.
-func (r *ReadChain) rd(amt int) []byte {
+func (r *Reader) rd(amt int) []byte {
 	if r == nil || r.err != nil {
 		return nil
 	}
