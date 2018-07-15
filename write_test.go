@@ -80,14 +80,14 @@ func BenchmarkWriteLong(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		x.
-			Bytes([]byte("Ok meme")).
+			ByteSlice([]byte("Ok meme")).
 			Int8(-122).
 			Uint64(52).
 			Uint64(2342).
 			Uint64(234).
 			Uint64(19869186912682).
 			Int32(186928).
-			Bytes([]byte("how much wood would a woodchuck chuck if a woodchuck could chhuck wood?")).
+			ByteSlice([]byte("how much wood would a woodchuck chuck if a woodchuck could chhuck wood?")).
 			Int64(6928692348).
 			Int64(242623).
 			Int64(235234523).
