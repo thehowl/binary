@@ -29,7 +29,7 @@ type WriteChain struct {
 	ByteOrder encodingBinary.ByteOrder
 	written   int
 	err       error
-	_buf      []byte
+	buf       [8]byte
 }
 
 // Write is a simple wrapper around c.Writer.Write. The WriteChain's internal
@@ -62,10 +62,6 @@ func (c *WriteChain) End() (int, error) {
 	c.written = 0
 	err := c.err
 	c.err = nil
-	if c._buf != nil {
-		bufpool.Put(c._buf)
-		c._buf = nil
-	}
 	return written, err
 }
 
@@ -77,7 +73,7 @@ type Reader struct {
 	ByteOrder encodingBinary.ByteOrder
 	read      int
 	err       error
-	buf       []byte
+	buf       [8]byte
 }
 
 var errReaderNil = errors.New("thehowl/binary: Reader is nil")

@@ -2,48 +2,30 @@ package binary
 
 import (
 	"io"
-	"sync"
 )
-
-var bufpool = &sync.Pool{
-	New: func() interface{} {
-		return make([]byte, 8)
-	},
-}
-
-func (c *WriteChain) buf() []byte {
-	if c._buf == nil {
-		c._buf = bufpool.Get().([]byte)
-	}
-	return c._buf
-}
 
 // Uint8 encodes an uint8 into the writer.
 func (c *WriteChain) Uint8(u uint8) *WriteChain {
-	b := c.buf()
-	b[0] = byte(u)
-	return c.Bytes(b[:1])
+	c.buf[0] = byte(u)
+	return c.Bytes(c.buf[:1])
 }
 
 // Uint16 encodes an uint16 into the writer.
 func (c *WriteChain) Uint16(u uint16) *WriteChain {
-	b := c.buf()
-	c.ByteOrder.PutUint16(b[:2], u)
-	return c.Bytes(b[:2])
+	c.ByteOrder.PutUint16(c.buf[:2], u)
+	return c.Bytes(c.buf[:2])
 }
 
 // Uint32 encodes an uint32 into the writer.
 func (c *WriteChain) Uint32(u uint32) *WriteChain {
-	b := c.buf()
-	c.ByteOrder.PutUint32(b[:4], u)
-	return c.Bytes(b[:4])
+	c.ByteOrder.PutUint32(c.buf[:4], u)
+	return c.Bytes(c.buf[:4])
 }
 
 // Uint64 encodes an uint64 into the writer.
 func (c *WriteChain) Uint64(u uint64) *WriteChain {
-	b := c.buf()
-	c.ByteOrder.PutUint64(b, u)
-	return c.Bytes(b)
+	c.ByteOrder.PutUint64(c.buf[:], u)
+	return c.Bytes(c.buf[:])
 }
 
 // Byte encodes a byte into the writer.

@@ -48,14 +48,11 @@ func (r *Reader) Bool() bool {
 	return r.Uint8() > 0
 }
 
-// not read (present) because read (past participle) is in the struct's
+// not read (imperative) because read (past participle) is in the struct's
 // fields.
 func (r *Reader) rd(amt int) []byte {
 	if r == nil || r.err != nil {
 		return nil
-	}
-	if r.buf == nil {
-		r.buf = bufpool.Get().([]byte)
 	}
 	ret := r.buf[:amt]
 	_, err := io.ReadFull(r, ret)
