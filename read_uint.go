@@ -1,9 +1,6 @@
 package binary
 
-import (
-	"errors"
-	"strconv"
-)
+import "io"
 
 // Uint8 decodes an uint8 from the Reader.
 func (r *Reader) Uint8() uint8 {
@@ -57,16 +54,15 @@ func (r *Reader) rd(amt int) []byte {
 	if r == nil || r.err != nil {
 		return nil
 	}
-	ret := make([]byte, amt)
-	n, err := r.Reader.Read(ret)
+	if r.buf == nil {
+		r.buf = bufpool.Get().([]byte)
+	}
+	ret := r.buf[:amt]
+	_, err := io.ReadFull(r, ret)
 	if err != nil {
 		r.err = err
+		// read is incremented by r.Read
 		return nil
 	}
-	if n != amt {
-		r.err = errors.New("thehowl/binary: expected to read " + strconv.Itoa(amt) + " bytes, read " + strconv.Itoa(n))
-		return nil
-	}
-	r.read += n
 	return ret
 }
